@@ -11,9 +11,10 @@ class BreedsViewHolder constructor(private val binding: BreedsListItemBinding) :
     fun bind(breed: Breed, position: Int) {
         with(binding) {
             root.tag = position
-            Glide.with(binding.root.context)
+            Glide.with(root.context)
                 .load(breed.image.url)
                 .into(breedThumbnail)
+            breedTitle.text = breed.name
         }
     }
 }
