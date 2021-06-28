@@ -1,0 +1,81 @@
+ext {
+    targetSdkVersion = 30
+    minSdkVersion = 28
+    compileSdkVersion = 30
+
+    gradleVersion = "4.1.1"
+    kotlinVersion = "1.4.20"
+    buildToolsVersion = "30.0.1"
+    appCompatVersion = "1.2.0"
+
+    kotlinCoroutinesVersion = "1.2.0-alpha"
+    materialVersion = "1.3.0"
+    timberVersion = "4.7.1"
+    daggerVersion = "2.28"
+    glideVersion = "4.12.0"
+    annotationVersion = "1.0.0-alpha1"
+    fragmentKtx = "1.2.4"
+
+    //tests
+    junitVersion = "1.1.2"
+    mockkVersion = "1.10.0"
+    archLifecycleVersion = "2.2.0"
+    kotlinCoroutinesTestVersion = "1.4.1"
+
+    //data
+    retrofitVersion = "2.6.0"
+
+
+    classpaths = [
+            gradle: "com.android.tools.build:gradle:${gradleVersion}",
+            kotlin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+    ]
+
+    appLibraries = [
+            fragmentKtx       : "androidx.fragment:fragment-ktx:${fragmentKtx}",
+            lifecycleVM       : "androidx.lifecycle:lifecycle-viewmodel:${archLifecycleVersion}",
+            lifecycleCommon   : "androidx.lifecycle:lifecycle-common-java8:${archLifecycleVersion}",
+            lifecycleVMKtx    : "androidx.lifecycle:lifecycle-viewmodel-ktx:${archLifecycleVersion}",
+            lifecycleExtension: "androidx.lifecycle:lifecycle-extensions:${archLifecycleVersion}",
+            lifecycledataKtx  : "androidx.lifecycle:lifecycle-livedata-ktx:${archLifecycleVersion}",
+            glide             : "com.github.bumptech.glide:glide:${glideVersion}",
+            appCompat         : "androidx.appcompat:appcompat:${appCompatVersion}",
+            material          : "com.google.android.material:material:${materialVersion}"
+    ]
+
+    domainLibraries = [
+
+    ]
+
+    dataLibraries = [
+            retrofit              : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            retrofitMoshiConverter: "com.squareup.retrofit2:converter-moshi:${retrofitVersion}"
+    ]
+
+    commonLibraries = [
+            kotlin                 : "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
+            kotlinCoroutineCore    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutinesVersion}",
+            kotlinCoroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinCoroutinesVersion}",
+            dagger                 : "com.google.dagger:dagger:${daggerVersion}",
+            daggerAndroid          : "com.google.dagger:dagger-android:${daggerVersion}",
+            daggerAndroidSupport   : "com.google.dagger:dagger-android-support:${daggerVersion}",
+            annotations            : "androidx.annotation:annotation:${annotationVersion}",
+            timber                 : "com.jakewharton.timber:timber:${timberVersion}"
+    ]
+
+    testLibraries = [
+            junit                  : "junit:junit:${junitVersion}",
+            mockk                  : "io.mockk:mockk:${mockkVersion}",
+            archCoreTest           : "android.arch.core:core-testing:${archLifecycleVersion}",
+            coroutinesTest         : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${kotlinCoroutinesTestVersion}",
+            kotlinCoroutineCore    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutinesVersion}",
+            kotlinCoroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinCoroutinesVersion}"
+
+    ]
+
+    annotationLibraries = [
+            daggerCompiler            : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            daggerKaptAndroidProcessor: "com.google.dagger:dagger-android-processor:${daggerVersion}",
+            gliderCompiler            : "com.github.bumptech.glide:compiler:${glideVersion}"
+    ]
+}

@@ -1,56 +1,39 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
 }
+
 apply from: '../dependencies/android_commons.gradle'
 apply from: '../dependencies/libraries.gradle'
 
 android {
+    buildTypes {
+        debug {
 
-    defaultConfig {
-        applicationId "com.dogs"
-        versionCode 1
-        versionName "1.0"
-    }
-
-    buildFeatures {
-        viewBinding true
-    }
-
-    packagingOptions {
-        exclude 'META-INF/atomicfu.kotlin_module'
+        }
     }
 }
 
 dependencies {
-    implementation project(":common")
-    implementation project(":domain")
-    implementation project(":data")
-
-    def dependencies = rootProject.ext.appLibraries
     def dataDependencies = rootProject.ext.dataLibraries
     def commonDependencies = rootProject.ext.commonLibraries
     def annotations = rootProject.ext.annotationLibraries
     def testDependencies = rootProject.ext.testLibraries
 
-    //annotations
-    annotations.each { name, value ->
-        kapt value
-    }
+    //data annotations
+    kapt annotations.daggerCompiler
 
-    // app dependencies
-    dependencies.each { name, value ->
-        implementation value
-    }
-    //common dependencies
-    commonDependencies.each { name, value ->
-        implementation value
-    }
     //data dependencies
     dataDependencies.each { name, value ->
         implementation value
     }
+
+    //common dependencies
+    commonDependencies.each { name, value ->
+        implementation value
+    }
+
     // Test dependencies
     testDependencies.each { name, value ->
         testImplementation value

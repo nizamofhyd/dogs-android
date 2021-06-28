@@ -1,0 +1,36 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+apply from: '../dependencies/android_commons.gradle'
+apply from: '../dependencies/libraries.gradle'
+
+android {
+
+    buildTypes {
+        debug {
+        }
+    }
+}
+
+
+dependencies {
+    implementation project(":data")
+    def commonDependencies = rootProject.ext.commonLibraries
+    def annotations = rootProject.ext.annotationLibraries
+    def testDependencies = rootProject.ext.testLibraries
+
+    kapt annotations.daggerCompiler
+
+    //common dependencies
+    commonDependencies.each { name, value ->
+        implementation value
+    }
+
+    // Test dependencies
+    testDependencies.each { name, value ->
+        testImplementation value
+    }
+}
