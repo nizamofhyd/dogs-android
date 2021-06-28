@@ -42,6 +42,6 @@ class DataModule {
     }
 }
 
-private const val BASE_URL = "https://api.thedogapi.com/v1"
+private const val BASE_URL = "https://api.thedogapi.com/v1/"
 private const val API_KEY_NAME = "x-api-key"
 private const val API_KEY = "00514b15-d48f-401b-bd4c-76f3e532d1af"
