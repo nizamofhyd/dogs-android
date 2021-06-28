@@ -1,5 +1,7 @@
 package com.dogs.data.di
 
+import com.dogs.data.repository.BreedsRepository
+import com.dogs.data.repository.BreedsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -32,6 +34,11 @@ class DataModule {
             chain.proceed(newRequest)
         }
         return httpClient.build()
+    }
+
+    @Provides
+    fun provideBreedsRepository(retrofit: Retrofit): BreedsRepository {
+        return BreedsRepositoryImpl(retrofit)
     }
 }
 
