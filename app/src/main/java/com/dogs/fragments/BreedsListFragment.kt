@@ -53,7 +53,7 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
 
                 is BreedsViewModel.BreedsViewState.BreedSearch -> {
                     val breedsAdapter = binding.breedsList.adapter as BreedsAdapter
-                    Timber.d("Dog search filter to do -> $it")
+                    breedsAdapter.filter.filter(it.breedSearchText)
                 }
                 else -> {
                 }

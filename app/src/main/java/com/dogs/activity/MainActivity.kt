@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity(), Injectable {
                         .replace(R.id.fragment_container_view, fragment)
                         .addToBackStack(BreedDetailFragment.TAG)
                         .commit()
+                    searchMenuItem.collapseActionView()
                     searchMenuItem.isVisible = it.showDogSearch
                 }
                 is BreedsViewModel.BreedsViewState.ShowBreeds -> {
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity(), Injectable {
         if (Intent.ACTION_SEARCH == intent.action) {
             val dogSearchText = intent.getStringExtra(SearchManager.QUERY)
             dogSearchText?.run {
-                Timber.d("Dog search text >> $this")
+                Timber.d("BreedFilter Dog search text >> $this")
                 breedsViewModel.searchDogBreed(this)
             }
         }
