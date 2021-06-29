@@ -1,5 +1,6 @@
 package com.dogs.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dogs.common.utils.CoroutineContextProvider
@@ -12,19 +13,29 @@ import javax.inject.Inject
 
 class BreedsViewModel @Inject constructor(private val breedsUseCase: BreedsUseCase) : ViewModel() {
 
-    val breedsLiveData = MutableLiveData<List<Breed>>()
-    val selectedBreed = MutableLiveData<Breed>()
+    private val _breedsViewState = MutableLiveData<BreedsViewState>()
+    val breedsViewState: LiveData<BreedsViewState> get() = _breedsViewState
 
     fun fetchBreeds(coroutineContextProvider: CoroutineContextProvider) {
         CoroutineScope(coroutineContextProvider.IO).launch {
             val breedsList = breedsUseCase.breeds()
             withContext(coroutineContextProvider.Main) {
-                breedsLiveData.postValue(breedsList)
+                _breedsViewState.value = BreedsViewState.ShowBreeds(breedsList)
             }
         }
     }
 
     fun updateSelectedBreed(breed: Breed) {
-        selectedBreed.postValue(breed)
+        _breedsViewState.value = BreedsViewState.ShowBreedDetail(breed)
+    }
+
+    fun searchDogBreed(breedSearch: String) {
+        _breedsViewState.value = BreedsViewState.BreedSearch(breedSearch)
+    }
+
+    sealed class BreedsViewState constructor(val showDogSearch: Boolean = true) {
+        data class ShowBreeds(val breedsList: List<Breed>) : BreedsViewState()
+        data class ShowBreedDetail(val breed: Breed) : BreedsViewState(showDogSearch = false)
+        data class BreedSearch(val breedSearchText: String) : BreedsViewState()
     }
 }

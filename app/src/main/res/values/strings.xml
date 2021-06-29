@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">DogsApplication</string>
+
+    <string name="menu_search">Search</string>
+    <string name="hint_dog_search">Dog search</string>
+
     <string name="breed_name">Name</string>
     <string name="breed_life_span">Life span</string>
     <string name="breed_bred_for">Bred for</string>

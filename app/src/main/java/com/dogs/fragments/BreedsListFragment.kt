@@ -11,6 +11,7 @@ import com.dogs.di.ViewModelFactory
 import com.dogs.fragments.adapter.BreedsAdapter
 import com.dogs.utils.viewBinding
 import com.dogs.viewmodels.BreedsViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
@@ -43,9 +44,20 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
     }
 
     private fun observeEvents() {
-        breedsViewModel.breedsLiveData.observe(viewLifecycleOwner, Observer {
-            val breedsAdapter = binding.breedsList.adapter as BreedsAdapter
-            breedsAdapter.loadBreeds(it)
+        breedsViewModel.breedsViewState.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is BreedsViewModel.BreedsViewState.ShowBreeds -> {
+                    val breedsAdapter = binding.breedsList.adapter as BreedsAdapter
+                    breedsAdapter.loadBreeds(it.breedsList)
+                }
+
+                is BreedsViewModel.BreedsViewState.BreedSearch -> {
+                    val breedsAdapter = binding.breedsList.adapter as BreedsAdapter
+                    Timber.d("Dog search filter to do -> $it")
+                }
+                else -> {
+                }
+            }
         })
     }
 
