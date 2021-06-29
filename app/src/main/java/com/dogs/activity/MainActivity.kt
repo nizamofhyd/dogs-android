@@ -50,6 +50,17 @@ class MainActivity : AppCompatActivity(), Injectable {
         searchView.apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
         }
+        searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                Timber.d("Search collapsed >>")
+                breedsViewModel.searchDogBreed(null)
+                return true
+            }
+        })
         return true
     }
 

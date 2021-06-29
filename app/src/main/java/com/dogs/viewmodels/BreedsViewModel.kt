@@ -29,13 +29,13 @@ class BreedsViewModel @Inject constructor(private val breedsUseCase: BreedsUseCa
         _breedsViewState.value = BreedsViewState.ShowBreedDetail(breed)
     }
 
-    fun searchDogBreed(breedSearch: String) {
+    fun searchDogBreed(breedSearch: String?) {
         _breedsViewState.value = BreedsViewState.BreedSearch(breedSearch)
     }
 
     sealed class BreedsViewState constructor(val showDogSearch: Boolean = true) {
         data class ShowBreeds(val breedsList: List<Breed>) : BreedsViewState()
         data class ShowBreedDetail(val breed: Breed) : BreedsViewState(showDogSearch = false)
-        data class BreedSearch(val breedSearchText: String) : BreedsViewState()
+        data class BreedSearch(val breedSearchText: String?) : BreedsViewState()
     }
 }
