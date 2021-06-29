@@ -2,6 +2,7 @@ package com.dogs.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.dogs.R
@@ -33,14 +34,16 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
     }
 
     private fun initialiseView() {
-        binding.breedsList.apply {
-            adapter = BreedsAdapter().apply {
-                onSelectedBreed = {
-                    breedsViewModel.updateSelectedBreed(it)
+        with(binding){
+            breedsList.apply {
+                adapter = BreedsAdapter().apply {
+                    onSelectedBreed = {
+                        breedsViewModel.updateSelectedBreed(it)
+                    }
                 }
             }
+            fetchDogBreeds()
         }
-        fetchDogBreeds()
     }
 
     private fun observeEvents() {
@@ -49,6 +52,7 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
                 is BreedsViewModel.BreedsViewState.ShowBreeds -> {
                     val breedsAdapter = binding.breedsList.adapter as BreedsAdapter
                     breedsAdapter.loadBreeds(it.breedsList)
+                    binding.breedsListProgressView.visibility = GONE
                 }
 
                 is BreedsViewModel.BreedsViewState.BreedSearch -> {
