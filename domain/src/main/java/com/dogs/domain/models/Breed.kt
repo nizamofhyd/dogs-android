@@ -1,3 +1,8 @@
 package com.dogs.domain.models
 
-data class Breed constructor(val name: String, val bredFor: String?, val lifeSpan: String, val temperament: String?, val image: Image)
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
+
+@Parcelize
+data class Breed constructor(val name: String, val bredFor: String?, val lifeSpan: String, val temperament: String?, val image: @RawValue Image): Parcelable

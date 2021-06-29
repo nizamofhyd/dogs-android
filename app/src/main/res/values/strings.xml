@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">DogsApplication</string>
+    <string name="breed_name">Name</string>
+    <string name="breed_life_span">Life span</string>
+    <string name="breed_bred_for">Bred for</string>
+    <string name="breed_temperament">Temperament</string>
 </resources>

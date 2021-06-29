@@ -13,6 +13,7 @@ import javax.inject.Inject
 class BreedsViewModel @Inject constructor(private val breedsUseCase: BreedsUseCase) : ViewModel() {
 
     val breedsLiveData = MutableLiveData<List<Breed>>()
+    val selectedBreed = MutableLiveData<Breed>()
 
     fun fetchBreeds(coroutineContextProvider: CoroutineContextProvider) {
         CoroutineScope(coroutineContextProvider.IO).launch {
@@ -21,5 +22,9 @@ class BreedsViewModel @Inject constructor(private val breedsUseCase: BreedsUseCa
                 breedsLiveData.postValue(breedsList)
             }
         }
+    }
+
+    fun updateSelectedBreed(breed: Breed) {
+        selectedBreed.postValue(breed)
     }
 }

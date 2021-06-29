@@ -33,7 +33,11 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
 
     private fun initialiseView() {
         binding.breedsList.apply {
-            adapter = BreedsAdapter()
+            adapter = BreedsAdapter().apply {
+                onSelectedBreed = {
+                    breedsViewModel.updateSelectedBreed(it)
+                }
+            }
         }
         fetchDogBreeds()
     }
