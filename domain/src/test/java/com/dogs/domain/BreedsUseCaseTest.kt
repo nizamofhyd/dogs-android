@@ -9,8 +9,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 
 class BreedsUseCaseTest {
@@ -23,14 +21,6 @@ class BreedsUseCaseTest {
     init {
         MockKAnnotations.init(this)
         breedsUseCase = BreedsUseCaseImpl(breedsRepository)
-    }
-
-    @Before
-    fun setUp() {
-    }
-
-    @After
-    fun tearDown() {
     }
 
     private fun mockDogBreeds() =
