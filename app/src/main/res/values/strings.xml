@@ -12,4 +12,5 @@
 
     <string name="error_prefix">An error occured due to </string>
     <string name="error_try_later">\nPlease try again later.</string>
+    <string name="search_no_results">No results found for search criteria.</string>
 </resources>

@@ -15,6 +15,7 @@ import com.dogs.di.ViewModelFactory
 import com.dogs.fragments.BreedDetailFragment
 import com.dogs.fragments.BreedsListFragment
 import com.dogs.viewmodels.BreedsViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), Injectable {
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity(), Injectable {
 
     private fun observeEvents() {
         breedsViewModel.breedsViewState.observe(this, {
+            Timber.d("Search observeEvents() >>>> $it")
             when (it) {
                 is BreedsViewModel.BreedsViewState.ShowBreedDetail -> {
                     val fragment = BreedDetailFragment()
@@ -92,10 +94,6 @@ class MainActivity : AppCompatActivity(), Injectable {
                         .replace(R.id.fragment_container_view, fragment)
                         .addToBackStack(BreedDetailFragment.TAG)
                         .commit()
-                    searchMenuItem.apply {
-                        collapseActionView()
-                        isVisible = it.showDogSearch
-                    }
                     supportActionBar?.apply {
                         setTitle(R.string.header_details)
                         setDisplayHomeAsUpEnabled(true)

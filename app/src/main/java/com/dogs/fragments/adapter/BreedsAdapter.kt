@@ -16,6 +16,7 @@ class BreedsAdapter : RecyclerView.Adapter<BreedsViewHolder>(), Filterable {
     private var displayBreedList: List<Breed> = emptyList()
     private val breedFilter = BreedFilter(this)
     var onSelectedBreed: (breed: Breed) -> Unit = {}
+    var onNoFilteredResults: () -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BreedsViewHolder {
         val binding =
@@ -67,8 +68,12 @@ class BreedsAdapter : RecyclerView.Adapter<BreedsViewHolder>(), Filterable {
 
         override fun publishResults(p0: CharSequence?, filterResults: FilterResults?) {
             filterResults?.let {
+                val newList = it.values as List<Breed>
                 breedsAdapter.displayBreedList = it.values as List<Breed>
                 breedsAdapter.notifyDataSetChanged()
+                if (newList.isEmpty()) {
+                    breedsAdapter.onNoFilteredResults()
+                }
             }
         }
     }

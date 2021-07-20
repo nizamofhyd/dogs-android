@@ -40,6 +40,9 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
                     onSelectedBreed = {
                         breedsViewModel.updateSelectedBreed(it)
                     }
+                    onNoFilteredResults = {
+                        showNoFilteredResults()
+                    }
                 }
             }
             fetchDogBreeds()
@@ -49,15 +52,14 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
 
     private fun observeEvents() {
         breedsViewModel.breedsViewState.observe(viewLifecycleOwner, Observer {
+            val breedsAdapter = binding.breedsList.adapter as BreedsAdapter
             when (it) {
                 is BreedsViewModel.BreedsViewState.ShowBreeds -> {
-                    val breedsAdapter = binding.breedsList.adapter as BreedsAdapter
                     breedsAdapter.loadBreeds(it.breedsList)
                     binding.breedsListProgressView.visibility = GONE
                 }
 
                 is BreedsViewModel.BreedsViewState.BreedSearch -> {
-                    val breedsAdapter = binding.breedsList.adapter as BreedsAdapter
                     breedsAdapter.filter.filter(it.breedSearchText)
                 }
                 is BreedsViewModel.BreedsViewState.OnError -> {
@@ -76,5 +78,13 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
 
     private fun fetchDogBreeds() {
         breedsViewModel.fetchBreeds(coroutineContextProvider)
+    }
+
+    private fun showNoFilteredResults() {
+        Toast.makeText(
+            context,
+            getString(R.string.search_no_results),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
