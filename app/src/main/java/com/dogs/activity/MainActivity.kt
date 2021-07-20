@@ -64,6 +64,16 @@ class MainActivity : AppCompatActivity(), Injectable {
         return true
     }
 
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            supportActionBar?.apply {
+                setTitle(R.string.app_name)
+                setDisplayHomeAsUpEnabled(false)
+            }
+        }
+        super.onBackPressed()
+    }
+
     private fun initialiseView() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container_view, BreedsListFragment())
@@ -84,8 +94,14 @@ class MainActivity : AppCompatActivity(), Injectable {
                         .replace(R.id.fragment_container_view, fragment)
                         .addToBackStack(BreedDetailFragment.TAG)
                         .commit()
-                    searchMenuItem.collapseActionView()
-                    searchMenuItem.isVisible = it.showDogSearch
+                    searchMenuItem.apply {
+                        collapseActionView()
+                        isVisible = it.showDogSearch
+                    }
+                    supportActionBar?.apply {
+                        setTitle(R.string.header_details)
+                        setDisplayHomeAsUpEnabled(true)
+                    }
                 }
                 is BreedsViewModel.BreedsViewState.ShowBreeds -> {
                     searchMenuItem.isVisible = it.showDogSearch

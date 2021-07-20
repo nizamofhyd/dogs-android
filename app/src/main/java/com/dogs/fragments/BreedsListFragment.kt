@@ -12,7 +12,6 @@ import com.dogs.di.ViewModelFactory
 import com.dogs.fragments.adapter.BreedsAdapter
 import com.dogs.utils.viewBinding
 import com.dogs.viewmodels.BreedsViewModel
-import timber.log.Timber
 import javax.inject.Inject
 
 class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
@@ -34,7 +33,7 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
     }
 
     private fun initialiseView() {
-        with(binding){
+        with(binding) {
             breedsList.apply {
                 adapter = BreedsAdapter().apply {
                     onSelectedBreed = {
@@ -45,6 +44,7 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
             fetchDogBreeds()
         }
     }
+
 
     private fun observeEvents() {
         breedsViewModel.breedsViewState.observe(viewLifecycleOwner, Observer {

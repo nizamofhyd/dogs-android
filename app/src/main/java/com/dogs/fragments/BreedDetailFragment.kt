@@ -1,6 +1,7 @@
 package com.dogs.fragments
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
 import com.dogs.R
@@ -14,7 +15,18 @@ class BreedDetailFragment : InjectedBaseFragment(R.layout.fragment_breed_detail)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         initialiseView()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                activity?.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initialiseView() {
