@@ -9,7 +9,7 @@ Branch:
 Please checkout branch `develop` where all the changes are pushed to.
 
 Unit tests using Mockk.io:
-Includes test for view model. More tests to be added to other layers.
+Includes test for view model, domain and data layers.
 
 Functionality:
 App home screen lists the dog breeds.
