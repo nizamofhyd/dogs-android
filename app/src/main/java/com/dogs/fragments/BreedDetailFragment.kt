@@ -1,6 +1,7 @@
 package com.dogs.fragments
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
@@ -27,6 +28,11 @@ class BreedDetailFragment : InjectedBaseFragment(R.layout.fragment_breed_detail)
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val searchMenuItem = menu.findItem(R.id.search_dog)
+        searchMenuItem?.isVisible = false
     }
 
     private fun initialiseView() {

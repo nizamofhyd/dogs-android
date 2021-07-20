@@ -9,4 +9,7 @@
     <string name="breed_life_span">Life span</string>
     <string name="breed_bred_for">Bred for</string>
     <string name="breed_temperament">Temperament</string>
+
+    <string name="error_prefix">An error occured due to </string>
+    <string name="error_try_later">\nPlease try again later.</string>
 </resources>

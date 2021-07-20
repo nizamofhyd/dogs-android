@@ -3,6 +3,7 @@ package com.dogs.fragments
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.dogs.R
@@ -58,6 +59,14 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
                 is BreedsViewModel.BreedsViewState.BreedSearch -> {
                     val breedsAdapter = binding.breedsList.adapter as BreedsAdapter
                     breedsAdapter.filter.filter(it.breedSearchText)
+                }
+                is BreedsViewModel.BreedsViewState.OnError -> {
+                    binding.breedsListProgressView.visibility = GONE
+                    Toast.makeText(
+                        context,
+                        "${getString(R.string.error_prefix)} ${it.message} ${getString(R.string.error_try_later)}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 else -> {
                 }

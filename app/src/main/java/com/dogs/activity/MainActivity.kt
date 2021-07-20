@@ -6,16 +6,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.dogs.R
 import com.dogs.di.Injectable
 import com.dogs.di.ViewModelFactory
 import com.dogs.fragments.BreedDetailFragment
 import com.dogs.fragments.BreedsListFragment
 import com.dogs.viewmodels.BreedsViewModel
-import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), Injectable {
@@ -56,7 +55,6 @@ class MainActivity : AppCompatActivity(), Injectable {
             }
 
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                Timber.d("Search collapsed >>")
                 breedsViewModel.searchDogBreed(null)
                 return true
             }
@@ -116,7 +114,6 @@ class MainActivity : AppCompatActivity(), Injectable {
         if (Intent.ACTION_SEARCH == intent.action) {
             val dogSearchText = intent.getStringExtra(SearchManager.QUERY)
             dogSearchText?.run {
-                Timber.d("BreedFilter Dog search text >> $this")
                 breedsViewModel.searchDogBreed(this)
             }
         }
