@@ -51,11 +51,12 @@ class MainActivity : AppCompatActivity(), Injectable {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
         }
         searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+
+            override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
                 return true
             }
 
-            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+            override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
                 breedsViewModel.searchDogBreed(null)
                 return true
             }
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity(), Injectable {
     }
 
     private fun observeEvents() {
-        breedsViewModel.breedsViewState.observe(this, {
+        breedsViewModel.breedsViewState.observe(this) {
             Timber.d("Search observeEvents() >>>> $it")
             when (it) {
                 is BreedsViewModel.BreedsViewState.ShowBreedDetail -> {
@@ -105,7 +106,7 @@ class MainActivity : AppCompatActivity(), Injectable {
                 else -> {
                 }
             }
-        })
+        }
     }
 
     private fun handleIntent(intent: Intent) {
