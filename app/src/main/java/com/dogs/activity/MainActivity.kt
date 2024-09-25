@@ -10,20 +10,16 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.dogs.R
-import com.dogs.di.Injectable
-import com.dogs.di.ViewModelFactory
 import com.dogs.fragments.BreedDetailFragment
 import com.dogs.fragments.BreedsListFragment
 import com.dogs.viewmodels.BreedsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), Injectable {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val breedsViewModel by viewModels<BreedsViewModel> { viewModelFactory }
+    private val breedsViewModel by viewModels<BreedsViewModel>()
 
     private lateinit var searchMenuItem: MenuItem
 
@@ -100,9 +96,11 @@ class MainActivity : AppCompatActivity(), Injectable {
                         setDisplayHomeAsUpEnabled(true)
                     }
                 }
+
                 is BreedsViewModel.BreedsViewState.ShowBreeds -> {
                     searchMenuItem.isVisible = it.showDogSearch
                 }
+
                 else -> {
                 }
             }

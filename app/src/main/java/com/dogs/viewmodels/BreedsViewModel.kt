@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.dogs.common.utils.CoroutineContextProvider
 import com.dogs.domain.models.Breed
 import com.dogs.domain.usecase.BreedsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -13,6 +14,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
+@HiltViewModel
 class BreedsViewModel @Inject constructor(private val breedsUseCase: BreedsUseCase) : ViewModel() {
 
     private val _breedsViewState = MutableLiveData<BreedsViewState>()

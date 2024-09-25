@@ -1,9 +1,9 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'kotlin-parcelize'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'dagger.hilt.android.plugin'
+
 apply from: '../dependencies/android_commons.gradle'
 apply from: '../dependencies/libraries.gradle'
 
@@ -58,6 +58,6 @@ dependencies {
         testImplementation value
     }
     androidTestLibraries.each { name, value ->
-        androidTestImplementation value
+        //androidTestImplementation value
     }
 }

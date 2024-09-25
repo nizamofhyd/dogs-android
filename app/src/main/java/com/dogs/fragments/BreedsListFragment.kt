@@ -9,21 +9,19 @@ import androidx.lifecycle.Observer
 import com.dogs.R
 import com.dogs.common.utils.CoroutineContextProvider
 import com.dogs.databinding.FragmentBreedsBinding
-import com.dogs.di.ViewModelFactory
 import com.dogs.fragments.adapter.BreedsAdapter
 import com.dogs.utils.viewBinding
 import com.dogs.viewmodels.BreedsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
 
     @Inject
     lateinit var coroutineContextProvider: CoroutineContextProvider
 
-    private val breedsViewModel by activityViewModels<BreedsViewModel> { viewModelFactory }
+    private val breedsViewModel by activityViewModels<BreedsViewModel>()
 
     private val binding by viewBinding(FragmentBreedsBinding::bind)
 
@@ -62,6 +60,7 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
                 is BreedsViewModel.BreedsViewState.BreedSearch -> {
                     breedsAdapter.filter.filter(it.breedSearchText)
                 }
+
                 is BreedsViewModel.BreedsViewState.OnError -> {
                     binding.breedsListProgressView.visibility = GONE
                     Toast.makeText(
@@ -70,6 +69,7 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
                         Toast.LENGTH_LONG
                     ).show()
                 }
+
                 else -> {
                 }
             }
