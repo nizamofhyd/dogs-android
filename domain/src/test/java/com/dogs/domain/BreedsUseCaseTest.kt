@@ -8,7 +8,9 @@ import com.dogs.domain.usecase.BreedsUseCaseImpl
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class BreedsUseCaseTest {
@@ -41,8 +43,9 @@ class BreedsUseCaseTest {
         )
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `Verify dog breeds returned from repository`() = runBlockingTest {
+    fun `Verify dog breeds returned from repository`() = runTest {
         //given
         coEvery {
             breedsRepository.breeds()

@@ -19,7 +19,7 @@ ext {
 
     //tests
     junitVersion = "1.1.2"
-    mockkVersion = "1.10.0"
+    mockkVersion = "1.13.12"
     kotlinCoroutinesTestVersion = "1.4.1"
     androidXTestCore = "1.0.0"
     androidXTest = "1.1.0"

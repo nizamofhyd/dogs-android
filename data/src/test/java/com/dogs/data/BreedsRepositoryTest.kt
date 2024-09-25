@@ -8,7 +8,9 @@ import com.dogs.data.service.BreedService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
 import org.junit.Test
 import retrofit2.HttpException
@@ -44,8 +46,9 @@ class BreedsRepositoryTest {
             )
         )
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `Verify api returns valid data`() = runBlockingTest {
+    fun `Verify api returns valid data`() = runTest {
         //given
         coEvery {
             retrofit.create(BreedService::class.java).breeds()
@@ -58,8 +61,9 @@ class BreedsRepositoryTest {
         assert(dogBreedsList.size == mockDogBreeds().size)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test(expected = HttpException::class)
-    fun `Verify api returns error`() = runBlockingTest {
+    fun `Verify api returns error`() = runTest {
         //given
         coEvery {
             retrofit.create(BreedService::class.java).breeds()
