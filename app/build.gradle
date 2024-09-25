@@ -9,6 +9,7 @@ apply from: '../dependencies/libraries.gradle'
 
 android {
 
+    namespace "com.dogs"
     defaultConfig {
         applicationId "com.dogs"
         versionCode 1
