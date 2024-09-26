@@ -2,7 +2,9 @@ package com.dogs.tests
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -15,16 +17,18 @@ open class BaseCoroutineTest {
     @JvmField
     val rule = InstantTaskExecutorRule()
 
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+    private val dispatcher = TestCoroutineDispatcher()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     open fun setUp() {
-        Dispatchers.setMain(mainThreadSurrogate)
+        Dispatchers.setMain(dispatcher)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     open fun tearDown() {
         Dispatchers.resetMain()
-        mainThreadSurrogate.close()
+        dispatcher.cleanupTestCoroutines()
     }
 }

@@ -77,7 +77,7 @@ class BreedsListFragment : InjectedBaseFragment(R.layout.fragment_breeds) {
     }
 
     private fun fetchDogBreeds() {
-        breedsViewModel.fetchBreeds(coroutineContextProvider)
+        breedsViewModel.fetchBreeds()
     }
 
     private fun showNoFilteredResults() {

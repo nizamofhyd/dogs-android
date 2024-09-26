@@ -9,7 +9,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -25,22 +26,26 @@ class BreedsUseCaseTest {
         breedsUseCase = BreedsUseCaseImpl(breedsRepository)
     }
 
-    private fun mockDogBreeds() =
-        listOf(
-            BreedRemote(
-                "Dog1",
-                "Racing",
-                "3years",
-                temperament = null,
-                ImageRemote("https://www.dummyurl.com/1", 450, 230)
-            ), BreedRemote(
-                "Dog2",
-                "Domestic",
-                "9years",
-                temperament = "Good",
-                ImageRemote("https://www.dummyurl.com/2", 450, 230)
+    private fun mockDogBreeds() = flow {
+        emit(
+            listOf(
+                BreedRemote(
+                    "Dog1",
+                    "Racing",
+                    "3years",
+                    temperament = null,
+                    ImageRemote("https://www.dummyurl.com/1", 450, 230)
+                ), BreedRemote(
+                    "Dog2",
+                    "Domestic",
+                    "9years",
+                    temperament = "Good",
+                    ImageRemote("https://www.dummyurl.com/2", 450, 230)
+                )
             )
         )
+    }
+
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -55,6 +60,6 @@ class BreedsUseCaseTest {
         val listOfBreeds = breedsUseCase.breeds()
 
         //then
-        assert(listOfBreeds.size == mockDogBreeds().size)
+        assert(listOfBreeds.first().size == mockDogBreeds().first().size)
     }
 }

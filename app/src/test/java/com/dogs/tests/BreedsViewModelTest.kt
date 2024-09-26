@@ -1,16 +1,14 @@
 package com.dogs.tests
 
-import androidx.lifecycle.Observer
 import com.dogs.domain.models.Breed
 import com.dogs.domain.usecase.BreedsUseCase
 import com.dogs.viewmodels.BreedsViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.slot
-import io.mockk.verify
+import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.flow.flow
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -21,9 +19,6 @@ class BreedsViewModelTest : BaseCoroutineTest() {
     private lateinit var breedsViewModel: BreedsViewModel
 
     @RelaxedMockK
-    private lateinit var mockBreedsViewStateLiveDataObserver: Observer<BreedsViewModel.BreedsViewState>
-
-    @RelaxedMockK
     private lateinit var mockBreedsUseCase: BreedsUseCase
 
     @RelaxedMockK
@@ -32,8 +27,6 @@ class BreedsViewModelTest : BaseCoroutineTest() {
     @RelaxedMockK
     private lateinit var mockBreed: Breed
 
-    private val testCoroutineContextProvider = TestCoroutineContextProvider()
-
     init {
         MockKAnnotations.init(this)
     }
@@ -41,51 +34,58 @@ class BreedsViewModelTest : BaseCoroutineTest() {
     @Before
     override fun setUp() {
         super.setUp()
-        breedsViewModel.breedsViewState.observeForever(mockBreedsViewStateLiveDataObserver)
     }
 
     @After
     override fun tearDown() {
         super.tearDown()
-        breedsViewModel.breedsViewState.removeObserver(mockBreedsViewStateLiveDataObserver)
     }
 
     @Test
     fun `Verify state to display list of dog breeds from view model`() {
         //given
-        val slot = slot<BreedsViewModel.BreedsViewState.ShowBreeds>()
-        lateinit var breedsViewState: BreedsViewModel.BreedsViewState.ShowBreeds
         coEvery {
             mockBreedsUseCase.breeds()
-        } returns mockBreedsList
-        every { mockBreedsViewStateLiveDataObserver.onChanged(capture(slot)) } answers {
-            breedsViewState = slot.captured
-        }
+        } coAnswers { flow { emit(mockBreedsList) } }
 
         //when
-        breedsViewModel.fetchBreeds(testCoroutineContextProvider)
+        breedsViewModel.fetchBreeds()
 
         //then
-        verify {
-            mockBreedsViewStateLiveDataObserver.onChanged(breedsViewState)
-        }
+        assertEquals(
+            BreedsViewModel.BreedsViewState.ShowBreeds(mockBreedsList),
+            breedsViewModel.breedsViewState.value
+        )
+    }
+
+    @Test
+    fun `Verify state on error during fetch of breeds list`() {
+        //given
+        coEvery {
+            mockBreedsUseCase.breeds()
+        } throws Exception("Unknown")
+
+        //when
+        breedsViewModel.fetchBreeds()
+
+        //then
+        assertEquals(
+            BreedsViewModel.BreedsViewState.OnError(errorCode = null, message = "Unknown"),
+            breedsViewModel.breedsViewState.value
+        )
     }
 
     @Test
     fun `Verify state to display detail view of a breed`() {
         //given
-        val slot = slot<BreedsViewModel.BreedsViewState.ShowBreedDetail>()
-        lateinit var breedsViewState: BreedsViewModel.BreedsViewState.ShowBreedDetail
-        every { mockBreedsViewStateLiveDataObserver.onChanged(capture(slot)) } answers {
-            breedsViewState = slot.captured
-        }
 
         //when
         breedsViewModel.updateSelectedBreed(mockBreed)
 
         //then
-        verify {
-            mockBreedsViewStateLiveDataObserver.onChanged(breedsViewState)
-        }
+        assertEquals(
+            BreedsViewModel.BreedsViewState.ShowBreedDetail(mockBreed),
+            breedsViewModel.breedsViewState.value
+        )
     }
 }

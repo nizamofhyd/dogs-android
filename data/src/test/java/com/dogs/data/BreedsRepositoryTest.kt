@@ -9,7 +9,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
 import org.junit.Test
@@ -55,7 +55,7 @@ class BreedsRepositoryTest {
         } returns mockDogBreeds()
 
         //when
-        val dogBreedsList = breedsRepository.breeds()
+        val dogBreedsList = breedsRepository.breeds().first()
 
         //then
         assert(dogBreedsList.size == mockDogBreeds().size)
@@ -70,6 +70,6 @@ class BreedsRepositoryTest {
         } throws HttpException(Response.error<String>(404, ResponseBody.create(null, "error")))
 
         //when
-        breedsRepository.breeds()
+        breedsRepository.breeds().first()
     }
 }
