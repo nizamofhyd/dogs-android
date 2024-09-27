@@ -25,10 +25,10 @@ ext {
     //tests
     junitVersion = "1.1.2"
     mockkVersion = "1.13.12"
-    kotlinCoroutinesTestVersion = "1.4.1"
+    kotlinCoroutinesTestVersion = "1.9.0-RC.2"
     androidXTestCore = "1.0.0"
     androidXTest = "1.1.0"
-    archCoreTest = "2.0.0"
+    archCoreTest = "2.1.0"
 
     //data
     retrofitVersion = "2.6.0"

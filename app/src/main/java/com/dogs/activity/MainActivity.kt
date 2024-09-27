@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,69 +39,35 @@ import com.dogs.compose.Screen
 import com.dogs.domain.models.Breed
 import com.dogs.viewmodels.BreedsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val breedsViewModel by viewModels<BreedsViewModel>()
 
-    private var breedsList: List<Breed> by mutableStateOf(emptyList())
-
-    private var selectedBreedIndex: Int by mutableIntStateOf(-1)
-
-    private var showErrorMessage: String? by mutableStateOf(null)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ScaffoldContent(showErrorMessage)
-        }
-        observeEvents()
-        initialiseView()
-    }
-
-
-    private fun initialiseView() {
-        breedsViewModel.fetchBreeds()
-    }
-
-    private fun observeEvents() {
-        breedsViewModel.breedsViewState.observe(this) {
-            Timber.d("Search observeEvents() >>>> $it")
-            showErrorMessage = null
-            when (it) {
-                is BreedsViewModel.BreedsViewState.OnError -> {
-                    showErrorMessage = it.message
-                }
-
-                is BreedsViewModel.BreedsViewState.ShowBreeds -> {
-                    breedsList = it.breedsList
-                }
-
-                else -> {
-                }
-            }
+            ScaffoldContent()
         }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun ScaffoldContent(
-        showErrorMessage: String? = remember {
-            null
-        }
-    ) {
+    fun ScaffoldContent() {
 
         val navController: NavHostController = rememberNavController()
         var backEnabled by remember {
             mutableStateOf(false)
         }
         val snackbarHostState = remember { SnackbarHostState() }
-        LaunchedEffect(showErrorMessage) {
-            showErrorMessage?.let {
+        val breedsUiState by breedsViewModel.uiState.collectAsState()
+        val showError = breedsUiState as? BreedsViewModel.BreedsUiState.OnError
+
+        LaunchedEffect(showError) {
+            showError?.let {
                 snackbarHostState.showSnackbar(
-                    actionLabel = showErrorMessage,
+                    actionLabel = showError.message,
                     message = "An unknown error occured due to ",
                     withDismissAction = true
                 )
@@ -121,7 +88,7 @@ class MainActivity : ComponentActivity() {
             },
             topBar = {
                 TopAppBar(
-                    title = { Text("Dogs Breeds") },
+                    title = { Text("Dog Breeds") },
                     navigationIcon = {
                         IconButton(onClick = {
                             navController.popBackStack()
@@ -150,6 +117,14 @@ class MainActivity : ComponentActivity() {
         startDestination: String = Screen.HOME.route,
         backEnabled: (flag: Boolean) -> Unit
     ) {
+        var breedsList: List<Breed> by remember {
+            mutableStateOf(emptyList())
+        }
+
+        var selectedBreedIndex: Int by remember {
+            mutableIntStateOf(-1)
+        }
+
         NavHost(
             navController = navController,
             startDestination = startDestination
@@ -157,6 +132,12 @@ class MainActivity : ComponentActivity() {
             // home screen
             composable(Screen.HOME.route) {
                 backEnabled.invoke(false)
+                val breedsUiState by breedsViewModel.uiState.collectAsState()
+                val showBreeds = breedsUiState as? BreedsViewModel.BreedsUiState.ShowBreeds
+                showBreeds?.let {
+                    breedsList = it.breedsList
+                }
+
                 BreedsListScreen(modifier = Modifier
                     .fillMaxSize()
                     .consumeWindowInsets(innerPadding)

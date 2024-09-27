@@ -5,17 +5,16 @@ import com.dogs.domain.usecase.BreedsUseCase
 import com.dogs.viewmodels.BreedsViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.RelaxedMockK
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 class BreedsViewModelTest : BaseCoroutineTest() {
 
-    @InjectMockKs
     private lateinit var breedsViewModel: BreedsViewModel
 
     @RelaxedMockK
@@ -27,6 +26,7 @@ class BreedsViewModelTest : BaseCoroutineTest() {
     @RelaxedMockK
     private lateinit var mockBreed: Breed
 
+
     init {
         MockKAnnotations.init(this)
     }
@@ -34,6 +34,8 @@ class BreedsViewModelTest : BaseCoroutineTest() {
     @Before
     override fun setUp() {
         super.setUp()
+        // work around for breedsviewmodel init block execution
+        breedsViewModel = BreedsViewModel(mockBreedsUseCase)
     }
 
     @After
@@ -42,7 +44,7 @@ class BreedsViewModelTest : BaseCoroutineTest() {
     }
 
     @Test
-    fun `Verify state to display list of dog breeds from view model`() {
+    fun `Verify state to display list of dog breeds from view model`() = runTest {
         //given
         coEvery {
             mockBreedsUseCase.breeds()
@@ -53,13 +55,13 @@ class BreedsViewModelTest : BaseCoroutineTest() {
 
         //then
         assertEquals(
-            BreedsViewModel.BreedsViewState.ShowBreeds(mockBreedsList),
-            breedsViewModel.breedsViewState.value
+            BreedsViewModel.BreedsUiState.ShowBreeds(mockBreedsList),
+            breedsViewModel.uiState.value
         )
     }
 
     @Test
-    fun `Verify state on error during fetch of breeds list`() {
+    fun `Verify state on error during fetch of breeds list`() = runTest {
         //given
         coEvery {
             mockBreedsUseCase.breeds()
@@ -70,22 +72,8 @@ class BreedsViewModelTest : BaseCoroutineTest() {
 
         //then
         assertEquals(
-            BreedsViewModel.BreedsViewState.OnError(errorCode = null, message = "Unknown"),
-            breedsViewModel.breedsViewState.value
-        )
-    }
-
-    @Test
-    fun `Verify state to display detail view of a breed`() {
-        //given
-
-        //when
-        breedsViewModel.updateSelectedBreed(mockBreed)
-
-        //then
-        assertEquals(
-            BreedsViewModel.BreedsViewState.ShowBreedDetail(mockBreed),
-            breedsViewModel.breedsViewState.value
+            BreedsViewModel.BreedsUiState.OnError(errorCode = null, message = "Unknown"),
+            breedsViewModel.uiState.value
         )
     }
 }

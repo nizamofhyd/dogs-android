@@ -3,8 +3,8 @@ package com.dogs.tests
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -17,7 +17,8 @@ open class BaseCoroutineTest {
     @JvmField
     val rule = InstantTaskExecutorRule()
 
-    private val dispatcher = TestCoroutineDispatcher()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val dispatcher = UnconfinedTestDispatcher()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -29,6 +30,6 @@ open class BaseCoroutineTest {
     @After
     open fun tearDown() {
         Dispatchers.resetMain()
-        dispatcher.cleanupTestCoroutines()
+        dispatcher.cancel()
     }
 }
