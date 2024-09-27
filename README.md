@@ -1,7 +1,7 @@
 # dogs-android
 
 Android app which lists the dog breeds which are retrieved via dogs open API (https://www.thedogapi.com/).
-This app uses MVVM with clean architectural pattern separating UI, Domain and Data layers.
+This app uses MVVM with clean architectural pattern separating UI, Domain and Data layers using kotlin coroutines and flows.
 Gradle files are also maintained clean by reusing some common settings into common gradle files.
 Used Hilt for dependency injection across the layers.
 
