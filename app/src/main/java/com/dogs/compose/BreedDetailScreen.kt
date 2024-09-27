@@ -2,9 +2,12 @@ package com.dogs.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,62 +22,67 @@ import com.dogs.domain.models.Breed
 @Composable
 fun BreedDetailScreen(modifier: Modifier = Modifier, breed: Breed) {
 
-    Column(modifier = modifier) {
+    LazyColumn(modifier = modifier) {
+        item {
+            Column(modifier = modifier) {
 
-        Image(
-            modifier = Modifier
-                //.width(dimensionResource(R.dimen.carousel_card_width))
-                .height(200.dp)
-                .fillMaxWidth(),
-            painter = rememberAsyncImagePainter(
-                breed.image.url
-            ),
-            contentDescription = breed.name,
-            contentScale = ContentScale.Crop
-        )
+                Image(
+                    modifier = Modifier
+                        //.width(dimensionResource(R.dimen.carousel_card_width))
+                        .height(300.dp)
+                        .fillMaxWidth(),
+                    painter = rememberAsyncImagePainter(
+                        breed.image.url
+                    ),
+                    contentDescription = breed.name,
+                    contentScale = ContentScale.Crop
+                )
 
-        // Name
-        Text(
-            modifier = Modifier.wrapContentSize(),
-            text = breed.name,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            textAlign = TextAlign.Left
-        )
+                // Name
+                Text(
+                    modifier = Modifier.wrapContentSize(),
+                    text = breed.name,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    textAlign = TextAlign.Left
+                )
 
-        // Lifespan
-        Text(
-            modifier = Modifier.wrapContentSize(),
-            text = breed.lifeSpan,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            textAlign = TextAlign.Left
-        )
+                // Lifespan
+                Text(
+                    modifier = Modifier.wrapContentSize(),
+                    text = breed.lifeSpan,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    textAlign = TextAlign.Left
+                )
 
-        // Bredfor
-        breed.bredFor?.let { bredFor ->
-            Text(
-                modifier = Modifier.wrapContentSize(),
-                text = bredFor,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                textAlign = TextAlign.Left
-            )
-        }
+                // Bredfor
+                breed.bredFor?.let { bredFor ->
+                    Text(
+                        modifier = Modifier.wrapContentSize(),
+                        text = bredFor,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        textAlign = TextAlign.Left
+                    )
+                }
 
-        // Temperament
-        breed.temperament?.let { temperament ->
-            Text(
-                modifier = Modifier.wrapContentSize(),
-                text = temperament,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                textAlign = TextAlign.Left
-            )
+                // Temperament
+                breed.temperament?.let { temperament ->
+                    Text(
+                        modifier = Modifier.wrapContentSize(),
+                        text = temperament,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        textAlign = TextAlign.Left
+                    )
+                }
+            }
         }
     }
+
 }
