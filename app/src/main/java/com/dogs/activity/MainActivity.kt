@@ -16,7 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -48,10 +49,12 @@ class MainActivity : ComponentActivity() {
 
     private var selectedBreedIndex: Int by mutableIntStateOf(-1)
 
+    private var showErrorMessage: String? by mutableStateOf(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ScaffoldContent()
+            ScaffoldContent(showErrorMessage)
         }
         observeEvents()
         initialiseView()
@@ -65,9 +68,12 @@ class MainActivity : ComponentActivity() {
     private fun observeEvents() {
         breedsViewModel.breedsViewState.observe(this) {
             Timber.d("Search observeEvents() >>>> $it")
+            showErrorMessage = null
             when (it) {
                 is BreedsViewModel.BreedsViewState.OnError -> {
+                    showErrorMessage = it.message
                 }
+
                 is BreedsViewModel.BreedsViewState.ShowBreeds -> {
                     breedsList = it.breedsList
                 }
@@ -80,12 +86,28 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun ScaffoldContent() {
+    fun ScaffoldContent(
+        showErrorMessage: String? = remember {
+            null
+        }
+    ) {
 
         val navController: NavHostController = rememberNavController()
         var backEnabled by remember {
             mutableStateOf(false)
         }
+        val snackbarHostState = remember { SnackbarHostState() }
+        LaunchedEffect(showErrorMessage) {
+            showErrorMessage?.let {
+                snackbarHostState.showSnackbar(
+                    actionLabel = showErrorMessage,
+                    message = "An unknown error occured due to ",
+                    withDismissAction = true
+                )
+            }
+        }
+
+
         val icon = if (!backEnabled) {
             Icons.Filled.Home
         } else {
@@ -94,6 +116,9 @@ class MainActivity : ComponentActivity() {
 
         Scaffold(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
             topBar = {
                 TopAppBar(
                     title = { Text("Dogs Breeds") },
