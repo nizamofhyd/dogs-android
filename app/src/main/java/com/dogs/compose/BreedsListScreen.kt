@@ -17,11 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.dogs.R
 import com.dogs.domain.models.Breed
 
 @Composable
@@ -42,22 +44,22 @@ fun BreedsListScreen(
                         onBreedClick(index)
                     }
                     .fillMaxWidth()
-                    //.height(dimensionResource(id = R.dimen.carousel_height))
-                    .height(150.dp)
-                    .padding(vertical = 10.dp, horizontal = 10.dp),
+                    .height(dimensionResource(id = R.dimen.breed_image_height))
+                    .padding(
+                        vertical = dimensionResource(id = R.dimen.padding_10),
+                        horizontal = dimensionResource(id = R.dimen.padding_10)
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Card(
                     modifier = Modifier
                         .wrapContentSize()
                         .fillMaxHeight(),
-                    //shape = RoundedCornerShape(dimensionResource(R.dimen.carousel_image_corner_radius))
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_8))
                 ) {
                     Image(
                         modifier = Modifier
-                            //.width(dimensionResource(R.dimen.carousel_card_width))
-                            .width(150.dp)
+                            .width(dimensionResource(id = R.dimen.breed_image_height))
                             .fillMaxHeight(),
                         painter = rememberAsyncImagePainter(
                             breed.image.url
