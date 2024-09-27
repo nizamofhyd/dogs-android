@@ -1,13 +1,17 @@
 package com.dogs.di
 
-import com.dogs.common.utils.CoroutineContextProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.components.SingletonComponent
+import timber.log.Timber
 
 @Module
-@InstallIn(FragmentComponent::class)
+@InstallIn(SingletonComponent::class)
 class AppModule {
 
+    @Provides
+    fun provideTimber(): Timber.Tree {
+        return Timber.DebugTree()
+    }
 }
