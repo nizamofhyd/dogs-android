@@ -50,6 +50,7 @@ class BreedsViewModel @Inject constructor(private val breedsUseCase: BreedsUseCa
     }
 
     sealed class BreedsViewState constructor(val showDogSearch: Boolean = true) {
+        data object Loading : BreedsViewState(showDogSearch = false)
         data class ShowBreeds(val breedsList: List<Breed>) : BreedsViewState()
         data class ShowBreedDetail(val breed: Breed) : BreedsViewState(showDogSearch = false)
         data class BreedSearch(val breedSearchText: String?) : BreedsViewState()

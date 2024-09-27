@@ -10,9 +10,4 @@ import dagger.hilt.android.components.FragmentComponent
 @InstallIn(FragmentComponent::class)
 class AppModule {
 
-
-    @Provides
-    fun provideCoroutineContextProvider(): CoroutineContextProvider {
-        return CoroutineContextProvider()
-    }
 }
