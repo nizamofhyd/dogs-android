@@ -42,6 +42,18 @@ class BreedsViewModel @Inject constructor(private val breedsUseCase: BreedsUseCa
         }
     }
 
+    fun findBreeds(searchBreeds: String) {
+        if (searchBreeds.isEmpty()) {
+            fetchBreeds()
+        } else {
+            viewModelScope.launch(exceptionHandler) {
+                breedsUseCase.findBreeds(searchBreeds).collect { breedsList ->
+                    _uiState.value = BreedsUiState.ShowBreeds(breedsList)
+                }
+            }
+        }
+    }
+
     sealed class BreedsUiState {
         data object Loading : BreedsUiState()
 

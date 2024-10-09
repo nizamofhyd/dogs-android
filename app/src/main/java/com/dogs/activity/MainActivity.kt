@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -121,7 +122,7 @@ class MainActivity : ComponentActivity() {
             mutableStateOf(emptyList())
         }
 
-        var selectedBreedIndex: Int by remember {
+        var selectedBreedIndex: Int by rememberSaveable {
             mutableIntStateOf(-1)
         }
 
@@ -133,19 +134,32 @@ class MainActivity : ComponentActivity() {
             composable(Screen.HOME.route) {
                 backEnabled.invoke(false)
                 val breedsUiState by breedsViewModel.uiState.collectAsState()
-                val showBreeds = breedsUiState as? BreedsViewModel.BreedsUiState.ShowBreeds
-                showBreeds?.let {
-                    breedsList = it.breedsList
-                }
+                when (breedsUiState) {
+                    is BreedsViewModel.BreedsUiState.ShowBreeds -> {
+                        val showBreeds = breedsUiState as BreedsViewModel.BreedsUiState.ShowBreeds
+                        breedsList = showBreeds.breedsList
 
-                BreedsListScreen(modifier = Modifier
-                    .fillMaxSize()
-                    .consumeWindowInsets(innerPadding)
-                    .padding(innerPadding),
-                    breeds = breedsList, onBreedClick = {
-                        selectedBreedIndex = it
-                        navController.navigate(Screen.BREED_DETAILS.route)
-                    })
+                        BreedsListScreen(modifier = Modifier
+                            .fillMaxSize()
+                            .consumeWindowInsets(innerPadding)
+                            .padding(innerPadding),
+                            breeds = breedsList, onBreedClick = {
+                                selectedBreedIndex = it
+                                navController.navigate(Screen.BREED_DETAILS.route)
+                            }, onBreedSearch = { findBreed ->
+                                breedsViewModel.findBreeds(findBreed)
+                            })
+                    }
+
+                    is BreedsViewModel.BreedsUiState.Loading -> {
+                        // TODO show loading
+                    }
+
+                    is BreedsViewModel.BreedsUiState.OnError -> {
+
+                    }
+
+                }
             }
 
             // details screen

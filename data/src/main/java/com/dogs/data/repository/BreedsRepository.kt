@@ -15,8 +15,16 @@ internal class BreedsRepositoryImpl @Inject constructor(private val retrofit: Re
             emit(retrofit.create(BreedService::class.java).breeds())
         }
     }
+
+    override fun findBreeds(searchBreeds: String): Flow<List<BreedRemote>> {
+        return flow {
+            emit(retrofit.create(BreedService::class.java).findBreeds(searchBreeds))
+        }
+    }
 }
 
 interface BreedsRepository {
     fun breeds(): Flow<List<BreedRemote>>
+
+    fun findBreeds(searchBreeds: String): Flow<List<BreedRemote>>
 }
