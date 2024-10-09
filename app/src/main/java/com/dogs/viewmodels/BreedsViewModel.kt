@@ -35,6 +35,7 @@ class BreedsViewModel @Inject constructor(private val breedsUseCase: BreedsUseCa
     }
 
     fun fetchBreeds() {
+        _uiState.value = BreedsUiState.Loading
         viewModelScope.launch(exceptionHandler) {
             breedsUseCase.breeds().collect { breedsList ->
                 _uiState.value = BreedsUiState.ShowBreeds(breedsList)

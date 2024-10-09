@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -50,6 +51,15 @@ fun BreedsListScreen(
                 vertical = dimensionResource(id = R.dimen.padding_10),
                 horizontal = dimensionResource(id = R.dimen.padding_10)
             ),
+            label = {
+                Text(
+                    text = stringResource(id = R.string.breed_search),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
+                )
+            },
             value = searchText, onValueChange = { findBreed ->
                 searchText = findBreed
                 onBreedSearch.invoke(findBreed)

@@ -2,7 +2,7 @@
     <string name="app_name">DogsApplication</string>
     <string name="header_details">Dog details</string>
 
-    <string name="menu_search">Search</string>
+    <string name="breed_search">Search Breed</string>
     <string name="hint_dog_search">Dog search</string>
 
     <string name="breed_name">Name</string>

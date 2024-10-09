@@ -36,6 +36,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.dogs.compose.BreedDetailScreen
 import com.dogs.compose.BreedsListScreen
+import com.dogs.compose.ProgressBar
 import com.dogs.compose.Screen
 import com.dogs.domain.models.Breed
 import com.dogs.viewmodels.BreedsViewModel
@@ -126,6 +127,17 @@ class MainActivity : ComponentActivity() {
             mutableIntStateOf(-1)
         }
 
+        var showLoading by remember {
+            mutableStateOf(false)
+        }
+        ProgressBar(
+            modifier = Modifier
+                .fillMaxSize()
+                .consumeWindowInsets(innerPadding)
+                .padding(innerPadding),
+            loading = showLoading
+        )
+
         NavHost(
             navController = navController,
             startDestination = startDestination
@@ -136,6 +148,7 @@ class MainActivity : ComponentActivity() {
                 val breedsUiState by breedsViewModel.uiState.collectAsState()
                 when (breedsUiState) {
                     is BreedsViewModel.BreedsUiState.ShowBreeds -> {
+                        showLoading = false
                         val showBreeds = breedsUiState as BreedsViewModel.BreedsUiState.ShowBreeds
                         breedsList = showBreeds.breedsList
 
@@ -152,11 +165,11 @@ class MainActivity : ComponentActivity() {
                     }
 
                     is BreedsViewModel.BreedsUiState.Loading -> {
-                        // TODO show loading
+                        showLoading = true
                     }
 
                     is BreedsViewModel.BreedsUiState.OnError -> {
-
+                        showLoading = false
                     }
 
                 }
