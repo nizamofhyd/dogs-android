@@ -2,7 +2,6 @@ package com.dogs.data
 
 import com.dogs.data.models.BreedRemote
 import com.dogs.data.models.ImageRemote
-import com.dogs.data.repository.BreedsRepository
 import com.dogs.data.repository.BreedsRepositoryImpl
 import com.dogs.data.service.BreedService
 import io.mockk.MockKAnnotations
@@ -22,7 +21,7 @@ class BreedsRepositoryTest {
     @RelaxedMockK
     private lateinit var retrofit: Retrofit
 
-    private var breedsRepository: BreedsRepository
+    private var breedsRepository: BreedsRepositoryImpl
 
     init {
         MockKAnnotations.init(this)

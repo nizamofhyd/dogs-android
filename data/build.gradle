@@ -21,6 +21,8 @@ dependencies {
     def annotations = rootProject.ext.annotationLibraries
     def testDependencies = rootProject.ext.testLibraries
 
+    implementation project(":domain")
+
     //data annotations
     kapt annotations.daggerCompiler
 

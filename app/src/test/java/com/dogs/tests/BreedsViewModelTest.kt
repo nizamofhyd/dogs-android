@@ -23,9 +23,6 @@ class BreedsViewModelTest : BaseCoroutineTest() {
     @RelaxedMockK
     private lateinit var mockBreedsList: List<Breed>
 
-    @RelaxedMockK
-    private lateinit var mockBreed: Breed
-
 
     init {
         MockKAnnotations.init(this)

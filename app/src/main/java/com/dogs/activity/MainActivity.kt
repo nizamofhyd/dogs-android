@@ -30,10 +30,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.dogs.R
 import com.dogs.compose.BreedDetailScreen
 import com.dogs.compose.BreedsListScreen
 import com.dogs.compose.ProgressBar
@@ -90,12 +92,12 @@ class MainActivity : ComponentActivity() {
             },
             topBar = {
                 TopAppBar(
-                    title = { Text("Dog Breeds") },
+                    title = { Text(getString(R.string.app_bar_title)) },
                     navigationIcon = {
                         IconButton(onClick = {
                             navController.popBackStack()
                         }) {
-                            Icon(icon, contentDescription = "Dogs Breeds Icon")
+                            Icon(icon, contentDescription = getString(R.string.app_bar_title))
                         }
                     }
                 )
@@ -145,7 +147,7 @@ class MainActivity : ComponentActivity() {
             // home screen
             composable(Screen.HOME.route) {
                 backEnabled.invoke(false)
-                val breedsUiState by breedsViewModel.uiState.collectAsState()
+                val breedsUiState by breedsViewModel.uiState.collectAsStateWithLifecycle()
                 when (breedsUiState) {
                     is BreedsViewModel.BreedsUiState.ShowBreeds -> {
                         showLoading = false
