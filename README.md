@@ -14,5 +14,6 @@ Includes test for view model, domain and data layers.
 Functionality:
 App home screen lists the dog breeds.
 On selecting any specific dog breed from list , user is navigated to detail page showing more details about the dog breed.
+List screen also provides option to search for a dog breed to find the new result set.
 App consists of one activity and 2 compose screens i.e one for list view and other for detail view.
 App supports android API level 28 and above only.
