@@ -10,9 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ProgressBar(modifier: Modifier = Modifier, loading: Boolean) {
-
-    if (!loading) return
+fun ProgressBar(modifier: Modifier = Modifier) {
 
     Box(modifier = modifier) {
 

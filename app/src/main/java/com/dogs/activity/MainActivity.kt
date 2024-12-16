@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,13 +21,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -65,16 +67,25 @@ class MainActivity : ComponentActivity() {
             mutableStateOf(false)
         }
         val snackbarHostState = remember { SnackbarHostState() }
-        val breedsUiState by breedsViewModel.uiState.collectAsState()
+        val breedsUiState by breedsViewModel.uiState.collectAsStateWithLifecycle()
         val showError = breedsUiState as? BreedsViewModel.BreedsUiState.OnError
 
         LaunchedEffect(showError) {
             showError?.let {
-                snackbarHostState.showSnackbar(
+                val snackBarResult = snackbarHostState.showSnackbar(
                     actionLabel = showError.message,
-                    message = "An unknown error occured due to ",
+                    message = getString(R.string.error_prefix),
                     withDismissAction = true
                 )
+                when (snackBarResult) {
+                    SnackbarResult.Dismissed -> {
+                        breedsViewModel.fetchBreeds()
+                    }
+
+                    else -> {
+                        // do nothing
+                    }
+                }
             }
         }
 
@@ -106,10 +117,12 @@ class MainActivity : ComponentActivity() {
                 AppNavHost(
                     navController,
                     startDestination = Screen.HOME.route,
-                    innerPadding = innerPadding
-                ) {
-                    backEnabled = it
-                }
+                    innerPadding = innerPadding,
+                    backEnabled = {
+                        backEnabled = it
+                    },
+                    breedsUiState = breedsUiState
+                )
             }
         )
     }
@@ -119,26 +132,31 @@ class MainActivity : ComponentActivity() {
         navController: NavHostController,
         innerPadding: PaddingValues,
         startDestination: String = Screen.HOME.route,
-        backEnabled: (flag: Boolean) -> Unit
+        backEnabled: (flag: Boolean) -> Unit,
+        breedsUiState: BreedsViewModel.BreedsUiState
     ) {
-        var breedsList: List<Breed> by remember {
-            mutableStateOf(emptyList())
-        }
-
-        var selectedBreedIndex: Int by rememberSaveable {
-            mutableIntStateOf(-1)
+        var selectedBreed: Breed? by rememberSaveable {
+            mutableStateOf(null)
         }
 
         var showLoading by remember {
             mutableStateOf(false)
         }
-        ProgressBar(
+
+        AnimatedVisibility(
             modifier = Modifier
-                .fillMaxSize()
-                .consumeWindowInsets(innerPadding)
-                .padding(innerPadding),
-            loading = showLoading
-        )
+                .fillMaxSize(),
+            visible = showLoading,
+            enter = EnterTransition.None,
+            exit = ExitTransition.None
+        ) {
+            ProgressBar(
+                modifier = Modifier
+                    .consumeWindowInsets(innerPadding)
+                    .padding(innerPadding)
+            )
+        }
+
 
         NavHost(
             navController = navController,
@@ -147,21 +165,19 @@ class MainActivity : ComponentActivity() {
             // home screen
             composable(Screen.HOME.route) {
                 backEnabled.invoke(false)
-                val breedsUiState by breedsViewModel.uiState.collectAsStateWithLifecycle()
                 when (breedsUiState) {
                     is BreedsViewModel.BreedsUiState.ShowBreeds -> {
                         showLoading = false
-                        val showBreeds = breedsUiState as BreedsViewModel.BreedsUiState.ShowBreeds
-                        breedsList = showBreeds.breedsList
 
                         BreedsListScreen(modifier = Modifier
                             .fillMaxSize()
                             .consumeWindowInsets(innerPadding)
                             .padding(innerPadding),
-                            breeds = breedsList, onBreedClick = {
-                                selectedBreedIndex = it
+                            breeds = breedsUiState.breedsList, onBreedClick = {
+                                selectedBreed = breedsUiState.breedsList[it]
                                 navController.navigate(Screen.BREED_DETAILS.route)
                             }, onBreedSearch = { findBreed ->
+                                backEnabled.invoke(true)
                                 breedsViewModel.findBreeds(findBreed)
                             })
                     }
@@ -180,13 +196,15 @@ class MainActivity : ComponentActivity() {
             // details screen
             composable(Screen.BREED_DETAILS.route) {
                 backEnabled.invoke(true)
-                BreedDetailScreen(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .consumeWindowInsets(innerPadding)
-                        .padding(innerPadding),
-                    breed = breedsList[selectedBreedIndex]
-                )
+                selectedBreed?.let {
+                    BreedDetailScreen(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .consumeWindowInsets(innerPadding)
+                            .padding(innerPadding),
+                        breed = it
+                    )
+                }
             }
 
         }
