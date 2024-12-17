@@ -18,7 +18,6 @@ android {
 
 
 dependencies {
-    //implementation project(":data")
     def commonDependencies = rootProject.ext.commonLibraries
     def annotations = rootProject.ext.annotationLibraries
     def testDependencies = rootProject.ext.testLibraries
