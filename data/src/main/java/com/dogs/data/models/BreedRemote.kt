@@ -1,6 +1,6 @@
 package com.dogs.data.models
 
-data class BreedRemote(
+internal data class BreedRemote(
     val name: String,
     private val bred_for: String?,
     private val life_span: String,

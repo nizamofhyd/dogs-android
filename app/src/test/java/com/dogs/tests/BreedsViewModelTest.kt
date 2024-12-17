@@ -61,7 +61,7 @@ class BreedsViewModelTest : BaseCoroutineTest() {
     fun `Verify state on error during fetch of breeds list`() = runTest {
         //given
         coEvery {
-            mockBreedsUseCase.breeds()
+            mockBreedsUseCase.breeds().collect(any())
         } throws Exception("Unknown")
 
         //when
